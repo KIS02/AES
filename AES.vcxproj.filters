@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AES.cpp">
+    <ClCompile Include="AES.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
