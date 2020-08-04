@@ -1,0 +1,2 @@
+C:\Users\Administraition\Desktop\git\AES\Debug\AES.exe
+C:\Users\Administraition\Desktop\git\AES\Debug\AES.pdb

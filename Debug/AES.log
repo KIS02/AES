@@ -1,10 +1,16 @@
 ﻿  AES.c
-C:\Users\김인성\Desktop\AES\AES\AES.c(35,6): warning C4013: 'gets'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(49,22): warning C4047: '!=': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(60,23): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(102,30): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(134,37): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(191,39): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(4,1): warning C4047: '초기화 중': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-C:\Users\김인성\Desktop\AES\AES\AES.c(6,1): warning C4047: '초기화 중': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
-  AES.vcxproj -> C:\Users\김인성\Desktop\AES\Debug\AES.exe
+C:\Users\Administraition\Desktop\git\AES\AES.c(35,6): warning C4013: 'gets'이(가) 정의되지 않았습니다. extern은 int형을 반환하는 것으로 간주합니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(49,22): warning C4047: '!=': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(74,30): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(118,29): warning C4047: '!=': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(123,30): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(153,38): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(153,78): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(211,39): warning C4047: '==': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(211,80): warning C4018: '>=': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(4,1): warning C4047: '초기화 중': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(6,1): warning C4047: '초기화 중': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(7,1): warning C4047: '초기화 중': 'char'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(9,1): warning C4047: '초기화 중': 'char'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+C:\Users\Administraition\Desktop\git\AES\AES.c(10,1): warning C4047: '초기화 중': 'int'의 간접 참조 수준이 'void *'과(와) 다릅니다.
+  AES.vcxproj -> C:\Users\Administraition\Desktop\git\AES\Debug\AES.exe
