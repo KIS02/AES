@@ -11,10 +11,11 @@ int main() {
 	char str_Data[64][16] = { NULL, }; // state 단위로 분해, 출력용
 	int int_Data[64][16] = { NULL, }; // 연산용
 	int Mixed_Data[64][16] = { 0, };
+
 	int int_Decryption[64][16] = { NULL, };
 	char str_Decryption[64][16] = { NULL, }; // state 단위로 분해, 출력용
 
-	int a, b, c, d, x;
+	int a, p, c, d, x;
 	int A, B, C, D;
 
 
@@ -201,12 +202,13 @@ int main() {
 			printf("%4x ", int_Data[i][j]);
 		}
 		printf("\n");
+		
 	}
 
 #pragma endregion
 
-
 	/*
+
 #pragma region MixColumns
 	printf("\n\n==============================\n\n");
 	printf("MixColumns]\n");
@@ -241,7 +243,6 @@ int main() {
 		printf("\n");
 	}
 #pragma endregion
-	*/
 
 
 
@@ -252,9 +253,6 @@ int main() {
 
 	printf("1. MixColumns\n");
 
-	printf("\n\n==============================\n\n");
-	printf("MixColumns]\n");
-
 
 	for (int i = 0; i < _mbstrlen(str) / 4; i++) {
 
@@ -262,19 +260,21 @@ int main() {
 			x = (Mixed_Data[i][j] + Mixed_Data[i][j + 4] + Mixed_Data[i][j + 8] + Mixed_Data[i][j + 12]) / 7;
 
 			a = (Mixed_Data[i][j] + 2 * Mixed_Data[i][j + 4]) - x;
-			b = (Mixed_Data[i][j+4] + 2 * Mixed_Data[i][j + 8]) - x;
+			p = (Mixed_Data[i][j+4] + 2 * Mixed_Data[i][j + 8]) - x;
 			c = (Mixed_Data[i][j+8] + 2 * Mixed_Data[i][j + 12]) - x;
 			d = (Mixed_Data[i][j+12] + 2 * Mixed_Data[i][j]) - x;
+			
+			A = (2 * p - 4 * c + 8 * d) / 15;
 
-			A = (2*b-4*c+8*d) / 15
-
-			int_Data[i / 4][j % 16] = int_Data[i / 16][j % 4] * MixColumn[(j / 4) * 4] +
+			int_Data[i / 4][j % 16] =  
+			int_Data[i / 16][j % 4] * MixColumn[(j / 4) * 4] + 
 			int_Data[i / 16][(j % 4) + 4] * MixColumn[(j / 4) * 4 + 1] +
 			int_Data[i / 16][(j % 4) + 8] * MixColumn[(j / 4) * 4 + 2] +
 			int_Data[i / 16][(j % 4) + 12] * MixColumn[(j / 4) * 4 + 3];
 		}
-
 	}
+	
+	// ToDoList : 첫번쨰 줄에서 복호화가 되지 않음 수정 요함.
 
 	//출력담당
 	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
@@ -286,28 +286,25 @@ int main() {
 
 			//str의 값이 끝나면 State 삽입 끊고 정리
 			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
-
-				//printf("check");
 				i = sizeof(str) / 16;
 				break;
 			}
-			printf("%4x ", Mixed_Data[i][j]);
+			printf("%4x ", int_Data[i][j]);
 		}
 		printf("\n");
 	}
-
-
-
-
-
-
+	*/
 	printf("2. ShiftRows\n");
 
 	memcpy( int_Decryption, int_Data, sizeof(int_Data));
 
 	for (int i = 0; i < sizeof(str) / 16; i++) {
-		for (int j = 0; j < 4; j++) {//열
+		for (int j = 0; j <= 4; j++) {//열
 			for (int k = 4 - j ; k % 4 > 0; k--) { //바꾼 횟수
+				
+
+				printf("*");
+
 				for (int l = 0; l < 3; l++) {//바꾸기용
 					if (int_Decryption[i][4 * (j)+(l + 1)] == -1) {
 						b = 1;
@@ -317,7 +314,7 @@ int main() {
 					int_Decryption[i][4 * (j)+(l + 1)] = int_Decryption[i][4 * j+l];
 					int_Decryption[i][4 * j + l] = temp;
 				
-					printf("*");
+					printf("+");
 				}
 				if (b == 1) {
 					k = j;
@@ -344,10 +341,7 @@ int main() {
 		}
 		printf("\n");
 	}
-
-
-
-
+	
 	printf("3. SubBytes\n");
 
 	//16X6
@@ -361,8 +355,11 @@ int main() {
 					if (int_Decryption[i][a] == SubBytesTable[b][c]) {
 						
 						str_Decryption[i][a] =( b*16 ) + c;
-						if ((b * 16) + c > 16) str_Decryption[i][a] -= 4;
+						if (((b * 16) + c) >= 16) {
 
+							
+							str_Decryption[i][a] -= 4;
+						}
 						b = 16;
 						c = 6;
 						break;
