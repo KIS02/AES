@@ -145,6 +145,7 @@ int main() {
 				j = 16;
 				break;
 			}
+			printf ("%d %d", (int)str_Data[i][j] / 16, (int)str_Data[i][j] % 16);
 
 			int_Data[i][j] = SubBytesTable[((int)str_Data[i][j] / 16)][((int)str_Data[i][j] % 16)];
 
@@ -248,9 +249,8 @@ int main() {
 #pragma region Decryption
 	printf("\n\n==============================\n\n");
 	printf("Decryption]\n");
-
-	printf("1. MixColumns\n");
-
+	printf ("\n\n==============================\n\n");
+	printf ("MixColumns]\n");
 
 	for (int i = 0; i < _mbstrlen(str) / 4; i++) {
 
@@ -291,39 +291,13 @@ int main() {
 		}
 		printf("\n");
 	}
-
-	// ToDoList : 첫번쨰 줄에서 복호화가 되지 않음 수정 요함.
-
-	//출력담당
-	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
-		for (int j = 0; j < 16; j++) { //state출력
-			//State 나누기 위한 한칸 공백
-			if (j % 4 == 0) {
-				printf("\n");
-			}
-
-			//str의 값이 끝나면 State 삽입 끊고 정리
-			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
-				i = sizeof(str) / 16;
-				break;
-			}
-			printf("%4x ", int_Data[i][j]);
-		}
-		printf("\n");
-	}
-
-
-	printf("2. ShiftRows\n");
+	printf ("\n==============================\n\n");
+	printf ("ShiftRows]\n");
 
 	memcpy( int_Decryption, int_Data, sizeof(int_Data));
-
 	for (int i = 0; i < sizeof(str) / 16; i++) {
 		for (int j = 0; j <= 4; j++) {//열
 			for (int k = 4 - j ; k % 4 > 0; k--) { //바꾼 횟수
-				
-
-				printf("*");
-
 				for (int l = 0; l < 3; l++) {//바꾸기용
 					if (int_Decryption[i][4 * (j)+(l + 1)] == -1) {
 						b = 1;
@@ -332,8 +306,6 @@ int main() {
 					temp = int_Decryption[i][4 * (j)+(l + 1)];
 					int_Decryption[i][4 * (j)+(l + 1)] = int_Decryption[i][4 * j+l];
 					int_Decryption[i][4 * j + l] = temp;
-				
-					printf("+");
 				}
 				if (b == 1) {
 					k = j;
@@ -360,28 +332,16 @@ int main() {
 		}
 		printf("\n");
 	}
-	
-	printf("3. SubBytes\n");
-
+	printf ("\n==============================\n\n");
+	printf ("SubBytes]\n");
 	//16X6
 
 	for (int i = 0; i < sizeof(str) / 16; i++) {
 		for (int a = 0; a < 16; a++) {
-		
 			for (int b = 0; b < 16;b++) {
 				for (int c = 0; c < 6;c++) {
-			
-					if (int_Decryption[i][a] == SubBytesTable[b][c]) {
-						
-						str_Decryption[i][a] =( b*16 ) + c;
-						if (((b * 16) + c) >= 16) {
-
-							
-							str_Decryption[i][a] -= 4;
-						}
-						b = 16;
-						c = 6;
-						break;
+					if (int_Decryption[i][a] == SubBytesTable[b][c]) {	
+						str_Decryption[i][a] =( b*6 ) + c;
 					}
 				}
 			}
@@ -394,7 +354,7 @@ int main() {
 				printf("\n");
 			}
 			//str의 값이 끝나면 State 삽입 끊고 정리
-			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
 				i = sizeof(str) / 16;
 				break;
 			}
@@ -402,5 +362,21 @@ int main() {
 		}
 		printf("\n");
 	}
+	for (int i = 0; i < sizeof (str) / 16; i++) { //전체state출력
+		for (int j = 0; j < 16; j++) { //state출력
+
+		
+			
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen (str)) {
+				i = sizeof (str) / 16;
+				break;
+			}	
+str_Decryption[i][j] += 65;
+		}
+	}
+	printf ("\n\n==============================\n\n");
+	printf ("복호화 결과]\n");
+	printf ("%s\n\n", &str_Decryption);
 #pragma endregion
 }
