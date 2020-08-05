@@ -25,10 +25,11 @@ int main() {
 								 0xf5, 0x45, 0x3b, 0x13, 0x89, 0xa, 0x32, 0x20, 0x9a, 0x50, 0xee, 0x40, 0x78, 0x36, 0xfd, 0xf6,
 								 0x9e, 0xdc, 0xad, 0x4f, 0x14, 0xf2, 0x44, 0x66, 0xd0, 0x6b, 0xc4, 0x30, 0xa1, 0x22, 0x91, 0x9d,
 								 0xda, 0xb0, 0xca, 0x2, 0xb9, 0x72, 0x2c, 0x80, 0x7e, 0xc5, 0xd5, 0xb2, 0xea, 0xc9, 0xcc, 0x53 };
+	
 	int MixColumn[16] = { 2, 3, 1, 1,
-							1, 2, 3, 1,
-							1, 1, 2, 3,
-							3, 1, 1, 2 };
+							          1, 2, 3, 1,
+						           	  1, 1, 2, 3,
+							          3, 1, 1, 2 };
 	/*
 	int fpb[256] = { 0, };
 
@@ -145,7 +146,7 @@ int main() {
 				j = 16;
 				break;
 			}
-			printf ("%d %d", (int)str_Data[i][j] / 16, (int)str_Data[i][j] % 16);
+			//printf ("%d %d", (int)str_Data[i][j] / 16, (int)str_Data[i][j] % 16);
 
 			int_Data[i][j] = SubBytesTable[((int)str_Data[i][j] / 16)][((int)str_Data[i][j] % 16)];
 
@@ -194,9 +195,8 @@ int main() {
 			}
 
 			//str의 값이 끝나면 State 삽입 끊고 정리
-			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
 
-				//printf("check");
 				i = sizeof(str) / 16;
 				break;
 			}
@@ -378,5 +378,6 @@ str_Decryption[i][j] += 65;
 	printf ("\n\n==============================\n\n");
 	printf ("복호화 결과]\n");
 	printf ("%s\n\n", &str_Decryption);
+	gets (str);
 #pragma endregion
 }
