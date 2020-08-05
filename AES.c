@@ -1,16 +1,17 @@
 #include<stdio.h>
+#include<memory.h>
 #include<stdlib.h>
 int main() {
-	int temp = NULL;	
+	int temp = NULL;
 	int b = 0;
 	int Text[64][16] = { NULL, };
 	char str[1000] = { NULL, };// 입력받는 용도
 
-	char str_Data[64][16]= { NULL, }; // state 단위로 분해, 출력용
+	char str_Data[64][16] = { NULL, }; // state 단위로 분해, 출력용
 	int int_Data[64][16] = { NULL, }; // 연산용
-	int Mixed_Data[64][16] = { 0, };	
-	char str_Decryption[64][16] = { NULL, };
+	int Mixed_Data[64][16] = { 0, };
 	int int_Decryption[64][16] = { NULL, };
+	char str_Decryption[64][16] = { NULL, }; // state 단위로 분해, 출력용
 
 
 
@@ -32,7 +33,7 @@ int main() {
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 16; j++) {
 			while (b == 0) {
-				
+
 				temp = rand() % 256;
 				if (fpb[temp] == 0) {
 					fpb[temp] = -1;
@@ -42,7 +43,7 @@ int main() {
 			}
 			fprintf(fp, "0x%x, ", temp );
 			b = 0;
-			
+
 		}
 		fprintf(fp, "\n");
 	}
@@ -65,8 +66,8 @@ int main() {
 		if (str[i] >= 97 && str[i] <= 122) {
 			str[i] -= 32;
 		}
-		else if ( !( str[i] >= 65 && str[i] <= 90 ) ) {
-			if( str[i] != NULL)
+		else if (!(str[i] >= 65 && str[i] <= 90)) {
+			if (str[i] != NULL)
 				str[i] = 32;
 		}
 	}
@@ -75,15 +76,16 @@ int main() {
 		if (str[i] == 32) {// 공백
 
 			for (int k = 0; k + i <= sizeof(str); k++) {
-				if (str[i+ k + 1] == NULL) {
+				if (str[i + k + 1] == NULL) {
 
-				} else {
-					
+				}
+				else {
+
 					str[i + k] = str[i + k + 1];
 				}
-			}		i--;	
+			}		i--;
 		}
-			
+
 	}
 	printf("\n\n==============================\n\n");
 	printf("대문자 변환 및 알파벳 외 탈락]\n\n%s\n", str);
@@ -101,15 +103,15 @@ int main() {
 			}
 
 			//str_Data에 str을 1State 단위로 분배해서 정렬
-			if (str[i * 16 + j]!=NULL) {
+			if (str[i * 16 + j] != NULL) {
 				str_Data[i][j] = (str[i * 16 + j]);
 			}
 
 			//str의 값이 끝나면 State 삽입 끊고 정리
 			if (str_Data[i][j] == NULL) {
 
-//str_Data[i][j] = "!";
-				i = sizeof(str)/16;
+				//str_Data[i][j] = "!";
+				i = sizeof(str) / 16;
 				break;
 			}
 
@@ -134,11 +136,10 @@ int main() {
 				printf("\n");
 			}
 			//str의 값이 끝나면 State 삽입 끊고 정리
-			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i *16 + j >= _mbstrlen(str)) {
-				//printf("check");
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
 				int_Data[i][j] = -1;
-				i = sizeof(str)/16;
-				j = 16;	
+				i = sizeof(str) / 16;
+				j = 16;
 				break;
 			}
 
@@ -159,19 +160,17 @@ int main() {
 
 
 	for (int i = 0; i < sizeof(str) / 16; i++) {
-		for (int j = 0; j < 4; j++) {
-			for (int k = 0; k < j; k++) {
-				for (int l = 0; l < 3; l++) {
-
-					if (int_Data[i][4 * (j + 1) - (l + 1)] == -1) {
+		for (int j = 0; j < 4; j++) {//열
+			for (int k = 0; k < j; k++) { //바꾼 횟수
+				for (int l = 0; l < 3; l++) {//바꾸기용
+					if (int_Data[i][4 * (j)+(l + 1)] == -1) {
 						b = 1;
+						l = 3;
 						continue;
 					}
-
-					temp = int_Data[i][4 * (j+1) - (l + 1)];
-					int_Data[i][4 * (j+1) - (l + 1)] = int_Data[i][4 * j];
-					int_Data[i][4*j]= temp;
-					
+					temp = int_Data[i][4 * (j)+(l + 1)];
+					int_Data[i][4 * (j)+(l + 1)] = int_Data[i][4 * j +l];
+					int_Data[i][4 * j + l] = temp;
 				}
 				if (b == 1) {
 					k = j;
@@ -184,28 +183,28 @@ int main() {
 
 	//출력담당
 	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
-			for (int j = 0; j < 16; j++) { //state출력
-				//State 나누기 위한 한칸 공백
-				if (j % 4 == 0) {
-					printf("\n");
-				}
-
-				//str의 값이 끝나면 State 삽입 끊고 정리
-				if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
-
-					//printf("check");
-					i = sizeof(str) / 16;
-					break;
-				}
-				printf("%4x ", int_Data[i][j]);
+		for (int j = 0; j < 16; j++) { //state출력
+			//State 나누기 위한 한칸 공백
+			if (j % 4 == 0) {
+				printf("\n");
 			}
-			printf("\n");
+
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+
+				//printf("check");
+				i = sizeof(str) / 16;
+				break;
+			}
+			printf("%4x ", int_Data[i][j]);
+		}
+		printf("\n");
 	}
 
 #pragma endregion
 
 
-
+	/*
 #pragma region MixColumns
 	printf("\n\n==============================\n\n");
 	printf("MixColumns]\n");
@@ -229,7 +228,7 @@ int main() {
 			}
 
 			//str의 값이 끝나면 State 삽입 끊고 정리
-			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
 
 				//printf("check");
 				i = sizeof(str) / 16;
@@ -240,7 +239,7 @@ int main() {
 		printf("\n");
 	}
 #pragma endregion
-
+	*/
 #pragma region Decryption
 	printf("\n\n==============================\n\n");
 	printf("Decryption]\n");
@@ -248,33 +247,89 @@ int main() {
 	printf("1. MixColumns\n");
 
 	printf("2. ShiftRows\n");
-	
-	strcpy(int_Decryption, int_Data);
-	strcpy(str_Decryption, str_Data);
-	
-	for (int a = 0; ;a++) {
-		for (int b = 0;;) { // 2층
-		}
 
-		for (int c = 0;;) { //3층
-		}
-		
-		for (int d = 0;;) { //4층
+	memcpy( int_Decryption, int_Data, sizeof(int_Data));
+
+	for (int i = 0; i < sizeof(str) / 16; i++) {
+		for (int j = 0; j < 4; j++) {//열
+			for (int k = 4 - j ; k % 4 > 0; k--) { //바꾼 횟수
+				for (int l = 0; l < 3; l++) {//바꾸기용
+					if (int_Decryption[i][4 * (j)+(l + 1)] == -1) {
+						b = 1;
+						continue;
+					}
+					temp = int_Decryption[i][4 * (j)+(l + 1)];
+					int_Decryption[i][4 * (j)+(l + 1)] = int_Decryption[i][4 * j+l];
+					int_Decryption[i][4 * j + l] = temp;
+				
+					printf("*");
+				}
+				if (b == 1) {
+					k = j;
+					j = 4;
+					i = sizeof(str) / 16;
+				}
+			}
 		}
 	}
+	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
+		for (int j = 0; j < 16; j++) { //state출력
+			//State 나누기 위한 한칸 공백
+			if (j % 4 == 0) {
+				printf("\n");
+			}
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+
+				//printf("check");
+				i = sizeof(str) / 16;
+				break;
+			}
+			printf("%4x ", int_Decryption[i][j]);
+		}
+		printf("\n");
+	}
+
+
 
 
 	printf("3. SubBytes\n");
 
+	//16X6
 
+	for (int i = 0; i < sizeof(str) / 16; i++) {
+		for (int a = 0; a < 16; a++) {
+		
+			for (int b = 0; b < 16;b++) {
+				for (int c = 0; c < 6;c++) {
+			
+					if (int_Decryption[i][a] == SubBytesTable[b][c]) {
+						
+						str_Decryption[i][a] =( b*16 ) + c;
+						if ((b * 16) + c > 16) str_Decryption[i][a] -= 4;
 
-
-
-
-
-
-
-
-
-#pragma endregion
+						b = 16;
+						c = 6;
+						break;
+					}
+				}
+			}
+		}
 	}
+	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
+		for (int j = 0; j < 16; j++) { //state출력
+			//State 나누기 위한 한칸 공백
+			if (j % 4 == 0) {
+				printf("\n");
+			}
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == /*"!"*/NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+				i = sizeof(str) / 16;
+				break;
+			}
+			printf("%4x ", str_Decryption[i][j]);
+		}
+		printf("\n");
+	}
+#pragma endregion
+}
