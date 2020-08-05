@@ -207,7 +207,6 @@ int main() {
 
 #pragma endregion
 
-	/*
 
 #pragma region MixColumns
 	printf("\n\n==============================\n\n");
@@ -246,7 +245,6 @@ int main() {
 
 
 
-
 #pragma region Decryption
 	printf("\n\n==============================\n\n");
 	printf("Decryption]\n");
@@ -257,23 +255,43 @@ int main() {
 	for (int i = 0; i < _mbstrlen(str) / 4; i++) {
 
 		for (int j = 0; j < 4; j++) {
-			x = (Mixed_Data[i][j] + Mixed_Data[i][j + 4] + Mixed_Data[i][j + 8] + Mixed_Data[i][j + 12]) / 7;
+			x = (Mixed_Data[i/4][j] + Mixed_Data[i / 4][j + 4] + Mixed_Data[i / 4][j + 8] + Mixed_Data[i / 4][j + 12]) / 7;
 
-			a = (Mixed_Data[i][j] + 2 * Mixed_Data[i][j + 4]) - x;
-			p = (Mixed_Data[i][j+4] + 2 * Mixed_Data[i][j + 8]) - x;
-			c = (Mixed_Data[i][j+8] + 2 * Mixed_Data[i][j + 12]) - x;
-			d = (Mixed_Data[i][j+12] + 2 * Mixed_Data[i][j]) - x;
+			a = (Mixed_Data[i / 4][j] - x);
+			p = (Mixed_Data[i / 4][j+4]-x);
+			c = (Mixed_Data[i / 4][j+8]-x);
+			d = (Mixed_Data[i / 4][j+12]-x);
 			
-			A = (2 * p - 4 * c + 8 * d) / 15;
+			A = (-a + 2 * p - 4 * c + 8 * d) / 15;
+			B = (-p + 2 * c - 4 * d + 8 * a) / 15;
+			C = (-c + 2 * d - 4 * a + 8 * p) / 15;
+			D = (-d + 2 * a - 4 * p + 8 * c) / 15;
 
-			int_Data[i / 4][j % 16] =  
-			int_Data[i / 16][j % 4] * MixColumn[(j / 4) * 4] + 
-			int_Data[i / 16][(j % 4) + 4] * MixColumn[(j / 4) * 4 + 1] +
-			int_Data[i / 16][(j % 4) + 8] * MixColumn[(j / 4) * 4 + 2] +
-			int_Data[i / 16][(j % 4) + 12] * MixColumn[(j / 4) * 4 + 3];
+			int_Data[i / 4][j % 4] = A;
+			int_Data[i / 4][(j % 4) + 4] = B;
+			int_Data[i / 4][(j % 4) + 8] = C;
+			int_Data[i / 4][(j % 4) + 12] = D;
 		}
 	}
-	
+
+	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
+		for (int j = 0; j < 16; j++) { //state출력
+			//State 나누기 위한 한칸 공백
+			if (j % 4 == 0) {
+				printf("\n");
+			}
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+
+				//printf("check");
+				i = sizeof(str) / 16;
+				break;
+			}
+			printf("%4x ", int_Data[i][j]);
+		}
+		printf("\n");
+	}
+
 	// ToDoList : 첫번쨰 줄에서 복호화가 되지 않음 수정 요함.
 
 	//출력담당
@@ -293,7 +311,8 @@ int main() {
 		}
 		printf("\n");
 	}
-	*/
+
+
 	printf("2. ShiftRows\n");
 
 	memcpy( int_Decryption, int_Data, sizeof(int_Data));
