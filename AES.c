@@ -1,3 +1,4 @@
+
 #include<stdio.h>
 #include<memory.h>
 #include<stdlib.h>
@@ -13,7 +14,8 @@ int main() {
 	int int_Decryption[64][16] = { NULL, };
 	char str_Decryption[64][16] = { NULL, }; // state 단위로 분해, 출력용
 
-
+	int a, b, c, d, x;
+	int A, B, C, D;
 
 
 	int SubBytesTable[16][6] = { 0x29, 0x23, 0xbe, 0x84, 0xe1, 0x6c, 0xd6, 0xae, 0x52, 0x90, 0x49, 0xf1, 0xbb, 0xe9, 0xeb, 0xb3,
@@ -240,11 +242,64 @@ int main() {
 	}
 #pragma endregion
 	*/
+
+
+
+
 #pragma region Decryption
 	printf("\n\n==============================\n\n");
 	printf("Decryption]\n");
 
 	printf("1. MixColumns\n");
+
+	printf("\n\n==============================\n\n");
+	printf("MixColumns]\n");
+
+
+	for (int i = 0; i < _mbstrlen(str) / 4; i++) {
+
+		for (int j = 0; j < 4; j++) {
+			x = (Mixed_Data[i][j] + Mixed_Data[i][j + 4] + Mixed_Data[i][j + 8] + Mixed_Data[i][j + 12]) / 7;
+
+			a = (Mixed_Data[i][j] + 2 * Mixed_Data[i][j + 4]) - x;
+			b = (Mixed_Data[i][j+4] + 2 * Mixed_Data[i][j + 8]) - x;
+			c = (Mixed_Data[i][j+8] + 2 * Mixed_Data[i][j + 12]) - x;
+			d = (Mixed_Data[i][j+12] + 2 * Mixed_Data[i][j]) - x;
+
+			A = (2*b-4*c+8*d) / 15
+
+			int_Data[i / 4][j % 16] = int_Data[i / 16][j % 4] * MixColumn[(j / 4) * 4] +
+			int_Data[i / 16][(j % 4) + 4] * MixColumn[(j / 4) * 4 + 1] +
+			int_Data[i / 16][(j % 4) + 8] * MixColumn[(j / 4) * 4 + 2] +
+			int_Data[i / 16][(j % 4) + 12] * MixColumn[(j / 4) * 4 + 3];
+		}
+
+	}
+
+	//출력담당
+	for (int i = 0; i < sizeof(str) / 16; i++) { //전체state출력
+		for (int j = 0; j < 16; j++) { //state출력
+			//State 나누기 위한 한칸 공백
+			if (j % 4 == 0) {
+				printf("\n");
+			}
+
+			//str의 값이 끝나면 State 삽입 끊고 정리
+			if ((str_Data[i][j] == NULL) && (str_Data[i][j] != 0) || i * 16 + j >= _mbstrlen(str)) {
+
+				//printf("check");
+				i = sizeof(str) / 16;
+				break;
+			}
+			printf("%4x ", Mixed_Data[i][j]);
+		}
+		printf("\n");
+	}
+
+
+
+
+
 
 	printf("2. ShiftRows\n");
 
